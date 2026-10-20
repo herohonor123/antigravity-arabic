@@ -1,0 +1,27 @@
+{
+  "name": "antigravity-arabic",
+  "version": "1.0.0",
+  "description": "Full Arabic RTL, BiDi Isolation, and Typography support for Google Antigravity AI Assistant.",
+  "main": "bin/cli.js",
+  "bin": {
+    "antigravity-arabic": "./bin/cli.js"
+  },
+  "scripts": {
+    "start": "node bin/cli.js inject",
+    "install-plugin": "node bin/cli.js install",
+    "status": "node bin/cli.js status",
+    "daemon": "node bin/cli.js daemon",
+    "uninstall": "node bin/cli.js uninstall"
+  },
+  "keywords": [
+    "antigravity",
+    "arabic",
+    "rtl",
+    "bidi",
+    "gemini",
+    "ai-assistant",
+    "typography"
+  ],
+  "author": "Antigravity Arabic Community",
+  "license": "MIT"
+}
