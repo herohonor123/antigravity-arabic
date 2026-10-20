@@ -22,6 +22,10 @@
     "ai-assistant",
     "typography"
   ],
-  "author": "Antigravity Arabic Community",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/herohonor123/antigravity-arabic.git"
+  },
+  "author": "Mohamed Elnashar <herohonor123@gmail.com>",
   "license": "MIT"
 }

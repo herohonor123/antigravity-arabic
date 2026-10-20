@@ -36,7 +36,14 @@
 
 ### 1. التثبيت الدائم (الموصى به)
 
-افتح الطرفية (Terminal / PowerShell) داخل مجلد المشروع ونفّذ:
+افتح الطرفية (Terminal / PowerShell) واستنسخ المشروع:
+
+```bash
+git clone https://github.com/herohonor123/antigravity-arabic.git
+cd antigravity-arabic
+```
+
+ثم نفّذ أمر التثبيت:
 
 #### على ويندوز (Windows):
 ```powershell
