@@ -89,6 +89,25 @@ inject().catch(() => {});
     console.log('✅ Arabic Agent Rules installed.');
     console.log('✅ Automatic SessionStart lifecycle hook registered.');
 
+    // 4. Set up Windows Auto-Start (Persistent across reboots)
+    if (process.platform === 'win32') {
+      try {
+        const startupDir = path.join(
+          process.env.APPDATA || path.join(os.homedir(), 'AppData', 'Roaming'),
+          'Microsoft', 'Windows', 'Start Menu', 'Programs', 'Startup'
+        );
+        if (fs.existsSync(startupDir)) {
+          const vbsPath = path.join(startupDir, 'AntigravityArabic.vbs');
+          const currentCliPath = path.resolve(__dirname, 'cli.js');
+          const vbsContent = `Set WshShell = CreateObject("WScript.Shell")\r\nWshShell.Run "node """ & "${currentCliPath.replace(/\\/g, '\\\\')}" & """ daemon", 0, False\r\n`;
+          fs.writeFileSync(vbsPath, vbsContent, 'utf8');
+          console.log('✅ Windows Startup script registered (runs automatically on boot/login).');
+        }
+      } catch (err) {
+        console.log(`ℹ️ Could not register Windows Startup script: ${err.message}`);
+      }
+    }
+
     // Inject immediately into current session if running
     try {
       console.log('\n🔍 Injecting fix into currently running Antigravity window...');
@@ -128,6 +147,21 @@ function handleUninstall() {
     console.log('✅ Plugin successfully removed.');
   } else {
     console.log('ℹ️ Plugin was not installed.');
+  }
+
+  // Remove Windows Startup script if exists
+  if (process.platform === 'win32') {
+    try {
+      const startupDir = path.join(
+        process.env.APPDATA || path.join(os.homedir(), 'AppData', 'Roaming'),
+        'Microsoft', 'Windows', 'Start Menu', 'Programs', 'Startup'
+      );
+      const vbsPath = path.join(startupDir, 'AntigravityArabic.vbs');
+      if (fs.existsSync(vbsPath)) {
+        fs.unlinkSync(vbsPath);
+        console.log('✅ Windows Startup script removed.');
+      }
+    } catch (e) {}
   }
 }
 
