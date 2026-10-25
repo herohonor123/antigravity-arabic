@@ -80,14 +80,43 @@ async function handleInstall() {
     );
 
     // Create runner script for hook
-    const hookRunnerScript = `const { inject } = require('./injector');
-inject().catch(() => {});
+    const hookRunnerScript = `const path = require('path');
+const { inject } = require(path.join(__dirname, 'injector'));
+
+async function main() {
+  try {
+    await inject();
+  } catch (e) {}
+  console.log('{}');
+}
+
+main();
 `;
     fs.writeFileSync(path.join(scriptsDir, 'run-inject.js'), hookRunnerScript, 'utf8');
 
+    // Generate dynamic hooks.json with exact path for resilient execution
+    const runInjectPath = path.join(scriptsDir, 'run-inject.js');
+    const dynamicHooks = {
+      "antigravity-arabic": {
+        "SessionStart": [
+          {
+            "type": "command",
+            "command": `node "${runInjectPath.replace(/\\\\/g, '\\\\\\\\')}"`
+          }
+        ],
+        "PreInvocation": [
+          {
+            "type": "command",
+            "command": `node "${runInjectPath.replace(/\\\\/g, '\\\\\\\\')}"`
+          }
+        ]
+      }
+    };
+    fs.writeFileSync(path.join(TARGET_PLUGIN_DIR, 'hooks.json'), JSON.stringify(dynamicHooks, null, 2), 'utf8');
+
     console.log(`✅ Plugin installed to: ${TARGET_PLUGIN_DIR}`);
     console.log('✅ Arabic Agent Rules installed.');
-    console.log('✅ Automatic SessionStart lifecycle hook registered.');
+    console.log('✅ Automatic SessionStart & PreInvocation lifecycle hooks registered.');
 
     // 4. Set up Windows Auto-Start (Persistent across reboots)
     if (process.platform === 'win32') {

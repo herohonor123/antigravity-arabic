@@ -5,6 +5,12 @@
         "type": "command",
         "command": "node ./scripts/run-inject.js"
       }
+    ],
+    "PreInvocation": [
+      {
+        "type": "command",
+        "command": "node ./scripts/run-inject.js"
+      }
     ]
   }
 }
